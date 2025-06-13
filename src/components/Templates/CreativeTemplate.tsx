@@ -24,47 +24,53 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ data }) => {
   }, {} as Record<string, typeof skills>);
 
   return (
-    <div className="max-w-4xl mx-auto bg-white text-gray-800 font-sans">
-      <div className="grid md:grid-cols-3 min-h-screen">
+    <div className="w-full h-full bg-white text-gray-800" style={{ fontFamily: 'sans-serif', fontSize: '12px', lineHeight: '1.4' }}>
+      <div className="grid grid-cols-3 min-h-full">
         {/* Left Sidebar */}
-        <div className="bg-gradient-to-b from-purple-600 to-purple-800 text-white p-8">
-          <div className="text-center mb-8">
-            <div className="w-32 h-32 bg-white bg-opacity-20 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-4xl font-bold">{personalInfo.fullName.charAt(0)}</span>
+        <div className="bg-gradient-to-b from-purple-600 to-purple-800 text-white p-6">
+          <div className="text-center mb-6">
+            <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full mx-auto mb-3 flex items-center justify-center">
+              <span className="text-2xl font-bold">
+                {personalInfo.fullName ? personalInfo.fullName.charAt(0) : 'Y'}
+              </span>
             </div>
-            <h1 className="text-2xl font-bold mb-2">{personalInfo.fullName}</h1>
+            <h1 className="text-lg font-bold mb-1" style={{ fontSize: '16px' }}>
+              {personalInfo.fullName || 'Your Name'}
+            </h1>
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-3 mb-8">
-            <h2 className="text-lg font-semibold mb-4 border-b border-purple-400 pb-2">Contact</h2>
+          <div className="space-y-2 mb-6">
+            <h2 className="text-sm font-semibold mb-3 border-b border-purple-400 pb-1">
+              Contact
+            </h2>
             {personalInfo.email && (
-              <div className="flex items-center text-sm">
-                <Mail className="h-4 w-4 mr-3 flex-shrink-0" />
+              <div className="flex items-center text-xs">
+                <Mail className="h-3 w-3 mr-2 flex-shrink-0" />
                 <span className="break-all">{personalInfo.email}</span>
               </div>
             )}
             {personalInfo.phone && (
-              <div className="flex items-center text-sm">
-                <Phone className="h-4 w-4 mr-3 flex-shrink-0" />
+              <div className="flex items-center text-xs">
+                <Phone className="h-3 w-3 mr-2 flex-shrink-0" />
                 <span>{personalInfo.phone}</span>
               </div>
             )}
             {personalInfo.location && (
-              <div className="flex items-center text-sm">
-                <MapPin className="h-4 w-4 mr-3 flex-shrink-0" />
+              <div className="flex items-center text-xs">
+                <MapPin className="h-3 w-3 mr-2 flex-shrink-0" />
                 <span>{personalInfo.location}</span>
               </div>
             )}
             {personalInfo.website && (
-              <div className="flex items-center text-sm">
-                <Globe className="h-4 w-4 mr-3 flex-shrink-0" />
+              <div className="flex items-center text-xs">
+                <Globe className="h-3 w-3 mr-2 flex-shrink-0" />
                 <span className="break-all">{personalInfo.website}</span>
               </div>
             )}
             {personalInfo.linkedin && (
-              <div className="flex items-center text-sm">
-                <Linkedin className="h-4 w-4 mr-3 flex-shrink-0" />
+              <div className="flex items-center text-xs">
+                <Linkedin className="h-3 w-3 mr-2 flex-shrink-0" />
                 <span>LinkedIn</span>
               </div>
             )}
@@ -72,22 +78,26 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ data }) => {
 
           {/* Skills */}
           {Object.keys(groupedSkills).length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold mb-4 border-b border-purple-400 pb-2">Skills</h2>
-              <div className="space-y-4">
+            <div className="mb-6">
+              <h2 className="text-sm font-semibold mb-3 border-b border-purple-400 pb-1">
+                Skills
+              </h2>
+              <div className="space-y-3">
                 {Object.entries(groupedSkills).map(([category, categorySkills]) => (
                   <div key={category}>
-                    <h3 className="font-medium text-purple-200 mb-2 capitalize text-sm">{category}</h3>
-                    <div className="space-y-2">
+                    <h3 className="font-medium text-purple-200 mb-2 capitalize text-xs">
+                      {category}
+                    </h3>
+                    <div className="space-y-1">
                       {categorySkills.map((skill) => (
                         <div key={skill.id}>
                           <div className="flex justify-between items-center mb-1">
-                            <span className="text-sm">{skill.name}</span>
+                            <span className="text-xs">{skill.name}</span>
                             <div className="flex">
                               {[...Array(4)].map((_, i) => (
                                 <Star
                                   key={i}
-                                  className={`h-3 w-3 ${
+                                  className={`h-2 w-2 ${
                                     i < getSkillLevelStars(skill.level)
                                       ? 'text-yellow-300 fill-current'
                                       : 'text-purple-300'
@@ -108,12 +118,14 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ data }) => {
           {/* Education */}
           {education.length > 0 && (
             <div>
-              <h2 className="text-lg font-semibold mb-4 border-b border-purple-400 pb-2">Education</h2>
-              <div className="space-y-4">
+              <h2 className="text-sm font-semibold mb-3 border-b border-purple-400 pb-1">
+                Education
+              </h2>
+              <div className="space-y-3">
                 {education.map((edu) => (
                   <div key={edu.id}>
-                    <h3 className="font-medium text-sm">{edu.degree}</h3>
-                    <p className="text-purple-200 text-sm">{edu.field}</p>
+                    <h3 className="font-medium text-xs">{edu.degree}</h3>
+                    <p className="text-purple-200 text-xs">{edu.field}</p>
                     <p className="text-purple-300 text-xs">{edu.institution}</p>
                     <div className="flex justify-between text-xs text-purple-300 mt-1">
                       <span>{edu.startDate} - {edu.endDate}</span>
@@ -127,46 +139,54 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ data }) => {
         </div>
 
         {/* Main Content */}
-        <div className="md:col-span-2 p-8">
+        <div className="col-span-2 p-6">
           {/* Summary */}
           {personalInfo.summary && (
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-purple-800 mb-4 relative">
+            <section className="mb-6">
+              <h2 className="text-lg font-bold text-purple-800 mb-3 relative" style={{ fontSize: '16px' }}>
                 About Me
-                <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-purple-600 to-purple-400"></div>
+                <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-600 to-purple-400"></div>
               </h2>
-              <p className="text-gray-600 leading-relaxed">{personalInfo.summary}</p>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                {personalInfo.summary}
+              </p>
             </section>
           )}
 
           {/* Experience */}
           {experience.length > 0 && (
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-purple-800 mb-6 relative">
+            <section className="mb-6">
+              <h2 className="text-lg font-bold text-purple-800 mb-4 relative" style={{ fontSize: '16px' }}>
                 Experience
-                <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-purple-600 to-purple-400"></div>
+                <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-600 to-purple-400"></div>
               </h2>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {experience.map((exp, index) => (
-                  <div key={exp.id} className="relative pl-6">
-                    <div className="absolute left-0 top-2 w-3 h-3 bg-purple-600 rounded-full"></div>
+                  <div key={exp.id} className="relative pl-4">
+                    <div className="absolute left-0 top-1 w-2 h-2 bg-purple-600 rounded-full"></div>
                     {index < experience.length - 1 && (
-                      <div className="absolute left-1.5 top-5 w-0.5 h-full bg-purple-200"></div>
+                      <div className="absolute left-0.5 top-3 w-0.5 h-full bg-purple-200"></div>
                     )}
                     
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <div className="flex justify-between items-start mb-1">
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-800">{exp.position}</h3>
-                          <p className="text-purple-600 font-medium">{exp.company}</p>
+                          <h3 className="text-sm font-semibold text-gray-800">
+                            {exp.position}
+                          </h3>
+                          <p className="text-purple-600 font-medium text-sm">
+                            {exp.company}
+                          </p>
                         </div>
-                        <div className="flex items-center text-sm text-gray-500 mt-1 md:mt-0">
-                          <Calendar className="h-4 w-4 mr-1" />
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Calendar className="h-3 w-3 mr-1" />
                           {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
                         </div>
                       </div>
                       {exp.description && (
-                        <p className="text-gray-600 mt-2">{exp.description}</p>
+                        <p className="text-gray-600 mt-1 text-xs leading-relaxed">
+                          {exp.description}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -178,33 +198,38 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ data }) => {
           {/* Projects */}
           {projects.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-purple-800 mb-6 relative">
+              <h2 className="text-lg font-bold text-purple-800 mb-4 relative" style={{ fontSize: '16px' }}>
                 Projects
-                <div className="absolute bottom-0 left-0 w-12 h-1 bg-gradient-to-r from-purple-600 to-purple-400"></div>
+                <div className="absolute bottom-0 left-0 w-8 h-0.5 bg-gradient-to-r from-purple-600 to-purple-400"></div>
               </h2>
-              <div className="grid gap-6">
+              <div className="space-y-4">
                 {projects.map((project) => (
-                  <div key={project.id} className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border-l-4 border-purple-600">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-semibold text-gray-800">{project.name}</h3>
-                      <div className="flex space-x-2">
+                  <div key={project.id} className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border-l-4 border-purple-600">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-semibold text-gray-800">
+                        {project.name}
+                      </h3>
+                      <div className="flex space-x-1">
                         {project.link && (
-                          <ExternalLink className="h-4 w-4 text-purple-600" />
+                          <ExternalLink className="h-3 w-3 text-purple-600" />
                         )}
                         {project.github && (
-                          <Github className="h-4 w-4 text-gray-600" />
+                          <Github className="h-3 w-3 text-gray-600" />
                         )}
                       </div>
                     </div>
                     {project.description && (
-                      <p className="text-gray-600 mb-3">{project.description}</p>
+                      <p className="text-gray-600 mb-2 text-xs leading-relaxed">
+                        {project.description}
+                      </p>
                     )}
                     {project.technologies.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {project.technologies.map((tech, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1 bg-purple-100 text-purple-800 text-xs rounded-full font-medium"
+                            className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs rounded-full font-medium"
+                            style={{ fontSize: '10px' }}
                           >
                             {tech}
                           </span>
