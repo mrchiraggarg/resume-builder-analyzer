@@ -9,7 +9,10 @@ export const exportToPDF = async (resumeData: ResumeData): Promise<void> => {
   }
 
   try {
-    // Create canvas from the resume element
+    // Ensure all fonts and styles are loaded
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Create canvas from the resume element with better options
     const canvas = await html2canvas(element, {
       scale: 2,
       useCORS: true,
@@ -17,23 +20,46 @@ export const exportToPDF = async (resumeData: ResumeData): Promise<void> => {
       backgroundColor: '#ffffff',
       width: element.scrollWidth,
       height: element.scrollHeight,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: element.scrollWidth,
+      windowHeight: element.scrollHeight,
+      onclone: (clonedDoc) => {
+        // Ensure the cloned document has proper styling
+        const clonedElement = clonedDoc.getElementById('resume-preview');
+        if (clonedElement) {
+          clonedElement.style.transform = 'none';
+          clonedElement.style.width = 'auto';
+          clonedElement.style.height = 'auto';
+          clonedElement.style.maxWidth = 'none';
+          clonedElement.style.maxHeight = 'none';
+          clonedElement.style.overflow = 'visible';
+        }
+      }
     });
 
-    // Calculate dimensions
-    const imgData = canvas.toDataURL('image/png');
+    // Calculate dimensions for A4 page
+    const imgData = canvas.toDataURL('image/png', 1.0);
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
+      compress: true
     });
 
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
     const imgWidth = canvas.width;
     const imgHeight = canvas.height;
-    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-    const imgX = (pdfWidth - imgWidth * ratio) / 2;
-    const imgY = 0;
+    
+    // Calculate scaling to fit the page while maintaining aspect ratio
+    const ratio = Math.min(pdfWidth / (imgWidth * 0.264583), pdfHeight / (imgHeight * 0.264583));
+    const scaledWidth = (imgWidth * 0.264583) * ratio;
+    const scaledHeight = (imgHeight * 0.264583) * ratio;
+    
+    // Center the image on the page
+    const imgX = (pdfWidth - scaledWidth) / 2;
+    const imgY = (pdfHeight - scaledHeight) / 2;
 
     // Add image to PDF
     pdf.addImage(
@@ -41,8 +67,10 @@ export const exportToPDF = async (resumeData: ResumeData): Promise<void> => {
       'PNG',
       imgX,
       imgY,
-      imgWidth * ratio,
-      imgHeight * ratio
+      scaledWidth,
+      scaledHeight,
+      undefined,
+      'FAST'
     );
 
     // Generate filename
